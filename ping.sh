@@ -24,10 +24,10 @@ while IFS= read -r server; do
 
     # Check the exit status of the ping command
     if [ $? -eq 0 ]; then
-        echo -e "  \e[32m$server is PINGING.\e[0m"
+        #echo -e "  \e[32m$server is PINGING.\e[0m"
         echo "$server" >> "$PINGING_SERVERS_FILE"
     else
-        echo -e "  \e[31m$server is NOT PINGING.\e[0m"
+        #echo -e "  \e[31m$server is NOT PINGING.\e[0m"
         echo "$server" >> "$NOT_PINGING_SERVERS_FILE"
     fi
     #echo "----------------------------------" # Separator for each server's check
