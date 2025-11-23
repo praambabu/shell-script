@@ -2,8 +2,13 @@
 
 hostname_file="servers.txt"
 OUTPUT_DIR="/tmp/health_check"
+NOT_PINGING_SERVERS_FILE="$OUTPUT_DIR/servers_not_pinging.txt"
+PING_COUNT=3
+PING_TIMEOUT=1
 
+# --- Setup ---
 mkdir -p "$OUTPUT_DIR"
+> "$NOT_PINGING_SERVERS_FILE"
 
 echo "Starting remote health checks..."
 echo "Output will be saved to '$OUTPUT_DIR/info-<hostname_or_ip>'"
@@ -12,6 +17,14 @@ echo "--------------------------------------------------"
 for i in $(cat "$hostname_file")
 do
     echo "Processing host: $i"
+
+    # Ping the server
+    ping -c "$PING_COUNT" -W "$PING_TIMEOUT" "$i" > /dev/null 2>&1
+
+
+    # Check the exit status of the ping command
+    if [ $? -eq 0 ]; then        
+
     # Define a unique output file for each host
     host_output_file="$OUTPUT_DIR/info-$i"
 
@@ -48,14 +61,20 @@ do
         echo "--- End of Remote Commands ---"
 EOF_REMOTE_COMMANDS
 
-    # Check the exit status of the SSH command *after* the here-document
-    if [ $? -ne 0 ]; then
-        echo -e "\e[31mError: SSH connection or remote command execution failed for $i. Check '$host_output_file'\e[0m"
     else
-        echo -e "\e[32mSuccessfully collected info from $i. Output in '$host_output_file'.\e[0m"
+       #echo -e "\e[31mError: SSH connection or remote command execution failed for $i. Check '$host_output_file'\e[0m"
+       echo "$i" >> "$NOT_PINGING_SERVERS_FILE"
+
     fi
-    echo "--------------------------------------------------"
-    echo " " # Add a blank line for better readability between hosts
+
+    # Check the exit status of the SSH command *after* the here-document
+    #if [ $? -ne 0 ]; then
+    #    echo -e "\e[31mError: SSH connection or remote command execution failed for $i. Check '$host_output_file'\e[0m"
+    #else
+    #    echo -e "\e[32mSuccessfully collected info from $i. Output in '$host_output_file'.\e[0m"
+    #fi
+    #echo "--------------------------------------------------"
+    #echo " " # Add a blank line for better readability between hosts
 
 done
 
