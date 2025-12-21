@@ -8,8 +8,9 @@ echo -e "2. Uptime\n"
 echo -e "3. Health-check\n"
 echo -e "4. Reboot\n"
 echo -e "5. Service-status\n"
-echo -e "6. cat\n"
+echo -e "6. Cat\n"
 echo -e "7. Adhoc commands\n"
+echo -e "8. User create\n"
 echo -e "0. Exit"
 echo " "
 
@@ -45,7 +46,7 @@ case $input in
     5) 
     clear
     echo "Service status"
-    /root/shell-script/5-Service-status.sh
+    /root/shell-script/5-service-status.sh
     sleep 2 
     ;;
     6) 
@@ -58,6 +59,13 @@ case $input in
     clear
     echo "Adhoc command"
     /root/shell-script/7-ad-hoc-command.sh
+    sleep 2
+    echo " "
+    ;;
+    8) 
+    clear
+    echo "User create"
+    /root/shell-script/8-user-create.sh
     sleep 2
     echo " "
     ;;
