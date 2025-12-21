@@ -37,13 +37,11 @@ while IFS= read -r server; do
     ping -c "$PING_COUNT" -W "$PING_TIMEOUT" "$server" > /dev/null 2>&1
 
     if [ $? -eq 0 ]; then
-     
         echo "Processing host: $server"
-
+        
         ssh root@"$server" /bin/bash << EOF_REMOTE_COMMANDS >> "$up" 2>&1
         
         hostname -f
-
         id "$user_name" > /dev/null 2>&1
 
         # We use \$? so the REMOTE server checks the status
@@ -55,7 +53,6 @@ while IFS= read -r server; do
             useradd "$user_name"
             id "$user_name"
         fi
-
         echo " "
 
 EOF_REMOTE_COMMANDS
