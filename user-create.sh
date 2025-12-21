@@ -46,12 +46,15 @@ while IFS= read -r server; do
 
         # We use \$? so the REMOTE server checks the status
         if [ \$? -eq 0 ]; then
+        
             echo "ID available"
             id "$user_name"
         else
+        
             echo "New ID created"   
             useradd "$user_name"
             id "$user_name"
+            
         fi
         echo " "
 
